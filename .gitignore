@@ -1,0 +1,9 @@
+*.img
+*.img.gz
+*.tar.gz
+openwrt/
+openwrt_packit/
+output/
+dl/
+.ccache/
+.DS_Store
