@@ -12,3 +12,11 @@ jobs:
           cd openwrt
           ./scripts/feeds update -a
           ./scripts/feeds install -a
+      - name: Configure
+        run: |
+          cd openwrt
+          cat > .config <<'EOF'
+CONFIG_TARGET_armvirt=y
+CONFIG_TARGET_armvirt_64=y
+CONFIG_TARGET_armvirt_64_Default=y
+CONFIG_TARGET_ROOTFS_TARGZ=y
