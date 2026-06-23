@@ -1,0 +1,8 @@
+name: R68S
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq build-essential git wget curl gawk libncurses-dev
