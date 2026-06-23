@@ -1,4 +1,4 @@
-name: Build R68S
+name: R68S Build
 
 on: workflow_dispatch
 
@@ -7,20 +7,15 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential git wget curl gawk
+      - run: sudo apt-get update && sudo apt-get install -y build-essential git wget curl gawk
 
       - name: Clone LEDE
         run: |
           git clone --depth=1 https://github.com/coolsnowwolf/lede openwrt
           cd openwrt
-          ./scripts/feeds update -a
-          ./scripts/feeds install -a
+          ./scripts/feeds update -a && ./scripts/feeds install -a
 
-      - name: Configure target
+      - name: Configure
         run: |
           cd openwrt
           cat > .config <<'EOF'
@@ -32,17 +27,13 @@ EOF
           make defconfig
 
       - name: Download
-        run: |
-          cd openwrt
-          make download -j$(nproc) 2>&1 | tail -5
+        run: cd openwrt && make download -j$(nproc) 2>&1 | tail -5
 
-      - name: Build rootfs
-        run: |
-          cd openwrt
-          make -j$(nproc) 2>&1 | tail -20
+      - name: Build
+        run: cd openwrt && make -j$(nproc) 2>&1 | tail -20
         timeout-minutes: 180
 
-      - name: Package for R68S
+      - name: Package
         uses: ophub/flippy-openwrt-actions@main
         env:
           OPENWRT_ARMSR: openwrt/bin/targets/*/*/*.tar.gz
